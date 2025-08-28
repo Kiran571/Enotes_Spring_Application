@@ -46,24 +46,41 @@ public class CategoryServiceImpl implements CategoryService {
 		 * this also valid : category.setIsDeleted(category.getIsActive());
 		 */
 
-		
-		 category.setIsDeleted(categoryDto.getIsActive()); 
-		 category.setCreatedOn(new Date());
-		 category.setCreatedBy(1);
 
+		
+		
+		if (ObjectUtils.isEmpty(category.getId())) {
+			category.setIsDeleted(categoryDto.getIsActive()); 
+			 category.setCreatedOn(new Date());
+			 category.setCreatedBy(1);
+		}
+		
+		else {
+			updateCategory(category);
+		}
 		
 		Category savedCategory = categoryRepository.save(category);
-
-		if (ObjectUtils.isEmpty(savedCategory)) {
-			return false;
-		}
+		if(ObjectUtils.isEmpty(savedCategory)) return false;
 		return true;
 
+	}
+	
+
+	public void updateCategory(Category savedCategory) {
+		
+		Optional<Category> findById= categoryRepository.findById(savedCategory.getId());
+		if(findById.isPresent()) {
+			Category existedCategory =  findById.get();
+			savedCategory.setCreatedBy(existedCategory.getCreatedBy());
+			savedCategory.setCreatedOn(existedCategory.getCreatedOn());
+		}
+		
+	
 	}
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
-		List<Category> allCategoriesList = categoryRepository.findAll();
+		List<Category> allCategoriesList = categoryRepository.findAllByIsActiveTrue();
 		
 		/*Converting to dto(middleware to pass btw Model and controller)*/
 		
@@ -97,5 +114,16 @@ public class CategoryServiceImpl implements CategoryService {
 		
 	}
 
+	@Override
+	public Boolean deleteCategoryById(Integer id) {
+		Optional<Category> findByCategoryId =  categoryRepository.findById(id);
+		if(findByCategoryId.isPresent()) {
+			Category category=findByCategoryId.get();
+			category.setIsDeleted(true);
+			categoryRepository.save(category);
+			return true;
+		}
+		return false;
+	}
 
 }

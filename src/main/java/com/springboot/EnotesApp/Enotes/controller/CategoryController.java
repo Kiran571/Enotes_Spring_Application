@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,13 +50,12 @@ public class CategoryController {
 		List<CategoryDto> allCategoriesList = categoryService.getAllCategory();
 		if(!allCategoriesList.isEmpty()) { //CollectionUtils.isEmpty()
 			return new ResponseEntity<>(allCategoriesList, HttpStatus.OK);
-		}
+		} 
 		
-		else return ResponseEntity.noContent().build();
+		else return new ResponseEntity<>("No categorues fund", HttpStatus.NO_CONTENT);
 		
 	}
-
-	@GetMapping("/active-category")
+	
 	public ResponseEntity<?> getActiveCategory(){
 		
 		List<CategoryResponse> activeCategoriesList = categoryService.getActiveCategory();
@@ -77,5 +77,14 @@ public class CategoryController {
 		return new ResponseEntity<>(categoryDto, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteById(@PathVariable Integer id){
+		
+		Boolean deletedCategoryById = categoryService.deleteCategoryById(id);
+		if(deletedCategoryById) {
+			return new ResponseEntity<>("Category deleted success for Id:" +id , HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Category not present", HttpStatus.NOT_FOUND);
+	}
 	
 }
