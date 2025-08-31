@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.springboot.EnotesApp.Enotes.entity.Category;
 import com.springboot.EnotesApp.Enotes.repository.CategoryRepository;
 import com.springboot.EnotesApp.Enotes.service.CategoryService;
+import com.springboot.EnotesApp.Exception.ResourceNotFoundException;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -47,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
 		 */
 
 
-		
 		
 		if (ObjectUtils.isEmpty(category.getId())) {
 			category.setIsDeleted(categoryDto.getIsActive()); 
@@ -104,23 +104,21 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public CategoryDto getCategoryById(Integer id) {
-		Optional<Category> findByCategory = categoryRepository.findById(id);
-		if(findByCategory.isPresent()) {
-			Category category=findByCategory.get();
-			return mapper.map(category, CategoryDto.class);
+	public CategoryDto getCategoryById(Integer id) throws Exception {
+		Category findByCategory = categoryRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Category ID not Found"));
+		if(!ObjectUtils.isEmpty(findByCategory)) {
+			return mapper.map(findByCategory, CategoryDto.class);
 		}
 		return null;
 		
 	}
 
 	@Override
-	public Boolean deleteCategoryById(Integer id) {
-		Optional<Category> findByCategoryId =  categoryRepository.findById(id);
-		if(findByCategoryId.isPresent()) {
-			Category category=findByCategoryId.get();
-			category.setIsDeleted(true);
-			categoryRepository.save(category);
+	public Boolean deleteCategoryById(Integer id) throws Exception {
+		Category findByCategoryId =  categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category not found to delete."));
+		if(!ObjectUtils.isEmpty(findByCategoryId)) {
+			findByCategoryId.setIsDeleted(true);
+			categoryRepository.save(findByCategoryId);
 			return true;
 		}
 		return false;

@@ -68,7 +68,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
+	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception{
 		
 		CategoryDto categoryDto = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(categoryDto)) {
@@ -78,7 +78,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Integer id){
+	public ResponseEntity<?> deleteById(@PathVariable Integer id) throws Exception{
 		
 		Boolean deletedCategoryById = categoryService.deleteCategoryById(id);
 		if(deletedCategoryById) {
