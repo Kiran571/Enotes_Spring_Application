@@ -23,6 +23,8 @@ import com.springboot.EnotesApp.Enotes.entity.Category;
 import com.springboot.EnotesApp.Enotes.repository.CategoryRepository;
 import com.springboot.EnotesApp.Enotes.service.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -32,13 +34,10 @@ public class CategoryController {
 	
 	
 	@PostMapping("/save-category")
-	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
-		
+	public ResponseEntity<?> saveCategory(@Valid @RequestBody CategoryDto categoryDto){
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
 		if(saveCategory) {
-
-			
 			return new ResponseEntity<>("Saved Successfully",HttpStatus.CREATED);
 		}
 		else return new ResponseEntity<>("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);		
