@@ -22,9 +22,16 @@ import com.springboot.EnotesApp.Enotes.entity.BaseModel;
 import com.springboot.EnotesApp.Enotes.entity.Category;
 import com.springboot.EnotesApp.Enotes.repository.CategoryRepository;
 import com.springboot.EnotesApp.Enotes.service.CategoryService;
+import com.springboot.EnotesApp.Exception.ResourceNotFoundException;
+
 
 import jakarta.validation.Valid;
 
+
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -67,17 +74,24 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
-		
-		CategoryDto categoryDto = categoryService.getCategoryById(id);
-		if(ObjectUtils.isEmpty(categoryDto)) {
-			return new ResponseEntity<>("Category not found with Id="+ id, HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception{
+		try {
+
+			CategoryDto categoryDto = categoryService.getCategoryById(id);
+			if(ObjectUtils.isEmpty(categoryDto)) {
+				return new ResponseEntity<>("Category not found with Id="+ id, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+			
+		}catch (ResourceNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(categoryDto, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Integer id){
+	public ResponseEntity<?> deleteById(@PathVariable Integer id) throws Exception{
 		
 		Boolean deletedCategoryById = categoryService.deleteCategoryById(id);
 		if(deletedCategoryById) {
