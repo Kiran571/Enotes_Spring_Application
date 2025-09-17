@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -34,14 +35,13 @@ public class CategoryDto {
 	private Integer id;
 	
 	@NotBlank
-	@Min(value = 10)
-	@Max(value = 100)
+	@Size(min = 3,max = 10,message = "Size must be 2 to 10")
+	
 	private String name;
 	
 	
 	@NotBlank
-	@Min(value = 10)
-	@Max(value = 100)
+	@Size(min = 3,max = 10,message = "Size must be 2 to 10")
 	private String description;
 	
 	@NotNull
