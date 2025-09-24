@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import com.springboot.EnotesApp.Enotes.dto.CategoryDto;
 import com.springboot.EnotesApp.Enotes.dto.CategoryResponse;
@@ -23,11 +24,8 @@ import com.springboot.EnotesApp.Enotes.entity.Category;
 import com.springboot.EnotesApp.Enotes.repository.CategoryRepository;
 import com.springboot.EnotesApp.Enotes.service.CategoryService;
 import com.springboot.EnotesApp.Exception.ResourceNotFoundException;
-
-
+import com.springboot.EnotesApp.Exception.GlobalExceptionHandler;
 import jakarta.validation.Valid;
-
-
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -47,7 +45,8 @@ public class CategoryController {
 		if(saveCategory) {
 			return new ResponseEntity<>("Saved Successfully",HttpStatus.CREATED);
 		}
-		else return new ResponseEntity<>("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);		
+		return new ResponseEntity<>("No Content Available",HttpStatus.NO_CONTENT);
+		
 	}
 	
 	@GetMapping("/category")
@@ -101,3 +100,5 @@ public class CategoryController {
 	}
 	
 }
+
+

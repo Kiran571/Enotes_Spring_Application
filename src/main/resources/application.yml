@@ -1,7 +1,7 @@
 spring:
   application:
     name: EnotesApplication
-    port: 8080
+
 
   datasource:
     url: jdbc:mysql://localhost:3306/enotes

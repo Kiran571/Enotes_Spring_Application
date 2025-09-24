@@ -24,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Data
@@ -36,18 +35,17 @@ public class CategoryDto {
 	
 	@NotBlank
 	@Size(min = 3,max = 10,message = "Size must be 2 to 10")
-	
-	private String name;
+	String name;
 	
 	
 	@NotBlank
-	@Size(min = 3,max = 10,message = "Size must be 2 to 10")
+	@Size(min = 3,max = 100,message = "Description must be 2 to 10")
 	private String description;
 	
 	@NotNull
 	private Boolean isActive;
 	
-	
+	@Column(name="is_deleted")
 	private Boolean isDeleted;
 	
 	private Integer createdBy;
