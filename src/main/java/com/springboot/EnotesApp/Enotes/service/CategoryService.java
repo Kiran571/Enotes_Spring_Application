@@ -15,9 +15,7 @@ public interface CategoryService {
 	
 	public List<CategoryResponse> getActiveCategory();
 
-	public CategoryDto getCategoryById(Integer id) throws Exception;
-
-	public Boolean deleteCategoryById(Integer id) throws Exception;
+	public CategoryDto getCategoryById(Integer id);
 	
 
 
