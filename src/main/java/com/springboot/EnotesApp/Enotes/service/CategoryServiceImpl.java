@@ -65,7 +65,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	}
 	
-
 	public void updateCategory(Category savedCategory) {
 		
 		Optional<Category> findById= categoryRepository.findById(savedCategory.getId());

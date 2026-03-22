@@ -35,8 +35,7 @@ public class CategoryDto {
 	
 	@NotBlank
 	@Size(min = 3,max = 10,message = "Size must be 2 to 10")
-	String name;
-	
+	private String name;
 	
 	@NotBlank
 	@Size(min = 3,max = 100,message = "Description must be 2 to 10")
