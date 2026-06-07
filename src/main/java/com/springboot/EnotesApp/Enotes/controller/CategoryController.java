@@ -17,65 +17,66 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.EnotesApp.Enotes.dto.CategoryDto;
 import com.springboot.EnotesApp.Enotes.dto.CategoryResponse;
+import com.springboot.EnotesApp.Enotes.endpoint.CategoryEndpoint;
 import com.springboot.EnotesApp.Enotes.entity.BaseModel;
 import com.springboot.EnotesApp.Enotes.entity.Category;
 import com.springboot.EnotesApp.Enotes.repository.CategoryRepository;
 import com.springboot.EnotesApp.Enotes.service.CategoryService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-@RequestMapping("/api/v1/category")
-public class CategoryController {
-	
+public class CategoryController implements CategoryEndpoint {
+
 	@Autowired
 	private CategoryService categoryService;
-	
-	
-	@PostMapping("/save-category")
-	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
-		
-		
-		Boolean saveCategory = categoryService.saveCategory(categoryDto);
-		if(saveCategory) {
 
-			
-			return new ResponseEntity<>("Saved Successfully",HttpStatus.CREATED);
-		}
-		else return new ResponseEntity<>("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);		
+	@PostMapping("/save-category")
+	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) {
+
+		Boolean saveCategory = categoryService.saveCategory(categoryDto);
+		if (saveCategory) {
+
+			return new ResponseEntity<>("Saved Successfully", HttpStatus.CREATED);
+		} else
+			return new ResponseEntity<>("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
+
 	@GetMapping("/category")
-	public ResponseEntity<?> getAllCategory(){
-		
+	public ResponseEntity<?> getAllCategory() {
+
 		List<CategoryDto> allCategoriesList = categoryService.getAllCategory();
-		if(!allCategoriesList.isEmpty()) { //CollectionUtils.isEmpty()
+		if (!allCategoriesList.isEmpty()) { // CollectionUtils.isEmpty()
 			return new ResponseEntity<>(allCategoriesList, HttpStatus.OK);
 		}
-		
-		else return ResponseEntity.noContent().build();
-		
+
+		else
+			return ResponseEntity.noContent().build();
+
 	}
 
 	@GetMapping("/active-category")
-	public ResponseEntity<?> getActiveCategory(){
-		
+	public ResponseEntity<?> getActiveCategory() {
+
 		List<CategoryResponse> activeCategoriesList = categoryService.getActiveCategory();
-		if(!activeCategoriesList.isEmpty()) { //CollectionUtils.isEmpty(activeCategoriesList)
+		if (!activeCategoriesList.isEmpty()) { // CollectionUtils.isEmpty(activeCategoriesList)
 			return new ResponseEntity<>(activeCategoriesList, HttpStatus.OK);
 		}
-		
-		else return ResponseEntity.noContent().build();
-		
+
+		else
+			return ResponseEntity.noContent().build();
+
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
-		
+	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) {
+
 		CategoryDto categoryDto = categoryService.getCategoryById(id);
-		if(ObjectUtils.isEmpty(categoryDto)) {
-			return new ResponseEntity<>("Category not found with Id="+ id, HttpStatus.NOT_FOUND);
+		if (ObjectUtils.isEmpty(categoryDto)) {
+			return new ResponseEntity<>("Category not found with Id=" + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(categoryDto, HttpStatus.OK);
 	}
-	
-	
+
 }
